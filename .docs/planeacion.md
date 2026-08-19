@@ -5,8 +5,8 @@ Este documento sirve como guía para el desarrollo de la actividad del SENA, bas
 ## 1. Requerimientos del Proyecto
 - **Frontend Móvil**: Flutter.
 - **Gestor de Estado y Rutas**: GetX.
-- **Backend API**: Node.js + Express (alojado en un repositorio separado).
-- **Base de Datos**: PostgreSQL mediante Supabase (backend).
+- **Backend API**: Python + FastAPI (alojado en un repositorio separado).
+- **Base de Datos**: PostgreSQL alojada en Aiven.
 - **Comunicación**: Paquete `http` para consumir la API REST.
 
 ## 2. Arquitectura de Carpetas (`lib/`)
@@ -23,7 +23,7 @@ Se seguirá una estructura basada en la separación de responsabilidades:
 
 ## 3. Dependencias Principales (`pubspec.yaml`)
 - `get`: ^4.6.6 (Inyección de dependencias, programación reactiva, manejo de estado y rutas).
-- `http`: ^1.2.0 (Cliente nativo para comunicarse con la API del backend en `127.0.0.1:3000`).
+- `http`: ^1.2.0 (Cliente nativo para comunicarse con la API del backend en `127.0.0.1:8000`).
 
 ## 4. Pantallas y Funcionalidad
 1. **Inicio**: Botón para ingresar al CRUD.
