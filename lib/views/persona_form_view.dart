@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/persona_controller.dart';
 import '../models/persona_model.dart';
+import '../validations/persona_validator.dart';
 
 class PersonaFormView extends StatefulWidget {
   final PersonaModel? persona;
@@ -51,12 +52,12 @@ class _PersonaFormViewState extends State<PersonaFormView> {
     if (_formKey.currentState!.validate()) {
       final newPersona = PersonaModel(
         id: widget.persona?.id,
-        identificacion: identificacionCtrl.text,
-        nombre: nombreCtrl.text,
-        apellido: apellidoCtrl.text,
-        email: emailCtrl.text,
-        telefono: telefonoCtrl.text.isNotEmpty ? telefonoCtrl.text : null,
-        direccion: direccionCtrl.text.isNotEmpty ? direccionCtrl.text : null,
+        identificacion: identificacionCtrl.text.trim(),
+        nombre: nombreCtrl.text.trim(),
+        apellido: apellidoCtrl.text.trim(),
+        email: emailCtrl.text.trim(),
+        telefono: telefonoCtrl.text.trim().isNotEmpty ? telefonoCtrl.text.trim() : null,
+        direccion: direccionCtrl.text.trim().isNotEmpty ? direccionCtrl.text.trim() : null,
       );
 
       if (isEditing) {
@@ -81,43 +82,50 @@ class _PersonaFormViewState extends State<PersonaFormView> {
             children: [
               TextFormField(
                 controller: identificacionCtrl,
-                decoration: const InputDecoration(labelText: 'Identificación'),
+                decoration: const InputDecoration(
+                  labelText: 'Identificación (10 dígitos)',
+                  hintText: 'Ej: 1033721059',
+                ),
+                keyboardType: TextInputType.number,
+                maxLength: 10,
                 readOnly: isEditing,
-                validator: (value) => value == null || value.isEmpty ? 'Campo requerido' : null,
+                validator: PersonaValidator.validateIdentificacion,
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: nombreCtrl,
                 decoration: const InputDecoration(labelText: 'Nombre'),
-                validator: (value) => value == null || value.isEmpty ? 'Campo requerido' : null,
+                validator: PersonaValidator.validateNombre,
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: apellidoCtrl,
                 decoration: const InputDecoration(labelText: 'Apellido'),
-                validator: (value) => value == null || value.isEmpty ? 'Campo requerido' : null,
+                validator: PersonaValidator.validateApellido,
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: emailCtrl,
                 decoration: const InputDecoration(labelText: 'Email'),
                 keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) return 'Campo requerido';
-                  if (!GetUtils.isEmail(value)) return 'Email inválido';
-                  return null;
-                },
+                validator: PersonaValidator.validateEmail,
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: telefonoCtrl,
-                decoration: const InputDecoration(labelText: 'Teléfono (Opcional)'),
+                decoration: const InputDecoration(
+                  labelText: 'Teléfono (Opcional)',
+                  hintText: 'Ej: 3144317548',
+                ),
                 keyboardType: TextInputType.phone,
+                maxLength: 10,
+                validator: PersonaValidator.validateTelefono,
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: direccionCtrl,
                 decoration: const InputDecoration(labelText: 'Dirección (Opcional)'),
+                validator: PersonaValidator.validateDireccion,
               ),
               const SizedBox(height: 30),
               SizedBox(
