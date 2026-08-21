@@ -85,6 +85,7 @@ class PersonaController extends GetxController {
       bool success = await _apiService.createPersona(persona);
       if (success) {
         await fetchPersonas();
+        selectedPhotoBase64.value = null;
         Get.back();
         Get.snackbar('Éxito', 'Persona agregada correctamente',
             snackPosition: SnackPosition.BOTTOM,
@@ -107,6 +108,7 @@ class PersonaController extends GetxController {
       bool success = await _apiService.updatePersona(id, persona);
       if (success) {
         await fetchPersonas();
+        selectedPhotoBase64.value = null;
         Get.back();
         Get.snackbar('Éxito', 'Persona actualizada correctamente',
             snackPosition: SnackPosition.BOTTOM,

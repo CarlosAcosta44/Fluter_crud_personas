@@ -64,7 +64,7 @@ class _PersonaFormViewState extends State<PersonaFormView> {
         email: emailCtrl.text.trim(),
         telefono: telefonoCtrl.text.trim().isNotEmpty ? telefonoCtrl.text.trim() : null,
         direccion: direccionCtrl.text.trim().isNotEmpty ? direccionCtrl.text.trim() : null,
-        fotoPerfil: controller.selectedPhotoBase64.value,
+        fotoPerfil: controller.selectedPhotoBase64.value ?? (isEditing ? widget.persona?.fotoPerfil : null),
       );
 
       if (isEditing) {

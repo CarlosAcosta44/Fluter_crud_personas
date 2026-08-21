@@ -38,14 +38,13 @@ class PersonaListView extends StatelessWidget {
             return Card(
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: persona.fotoPerfil != null && persona.fotoPerfil!.isNotEmpty
-                      ? MemoryImage(base64Decode(persona.fotoPerfil!))
-                      : null,
-                  child: persona.fotoPerfil == null || persona.fotoPerfil!.isEmpty
-                      ? const Icon(Icons.person)
-                      : null,
-                ),
+                leading: (persona.fotoPerfil != null && persona.fotoPerfil!.isNotEmpty)
+                    ? CircleAvatar(
+                        backgroundImage: MemoryImage(base64Decode(persona.fotoPerfil!)),
+                      )
+                    : const CircleAvatar(
+                        child: Icon(Icons.person),
+                      ),
                 title: Text('${persona.nombre} ${persona.apellido}'),
                 subtitle: Text('ID: ${persona.identificacion}'),
                 trailing: Row(
