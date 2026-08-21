@@ -8,6 +8,22 @@ import 'persona_detail_view.dart';
 class PersonaListView extends StatelessWidget {
   const PersonaListView({Key? key}) : super(key: key);
 
+  Widget _buildAvatar(String? base64String) {
+    if (base64String == null || base64String.isEmpty) {
+      return const CircleAvatar(child: Icon(Icons.person));
+    }
+    try {
+      final cleanBase64 = base64String.contains(',') 
+          ? base64String.split(',').last 
+          : base64String;
+      return CircleAvatar(
+        backgroundImage: MemoryImage(base64Decode(cleanBase64)),
+      );
+    } catch (e) {
+      return const CircleAvatar(child: Icon(Icons.person));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final PersonaController controller = Get.put(PersonaController());
@@ -38,13 +54,7 @@ class PersonaListView extends StatelessWidget {
             return Card(
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: ListTile(
-                leading: (persona.fotoPerfil != null && persona.fotoPerfil!.isNotEmpty)
-                    ? CircleAvatar(
-                        backgroundImage: MemoryImage(base64Decode(persona.fotoPerfil!)),
-                      )
-                    : const CircleAvatar(
-                        child: Icon(Icons.person),
-                      ),
+                leading: _buildAvatar(persona.fotoPerfil),
                 title: Text('${persona.nombre} ${persona.apellido}'),
                 subtitle: Text('ID: ${persona.identificacion}'),
                 trailing: Row(

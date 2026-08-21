@@ -56,6 +56,8 @@ class _PersonaFormViewState extends State<PersonaFormView> {
 
   void _saveForm() {
     if (_formKey.currentState!.validate()) {
+      final photoVal = controller.selectedPhotoBase64.value;
+      print('Enviando foto: ${photoVal != null && photoVal.length > 30 ? photoVal.substring(0, 30) : photoVal}...');
       final newPersona = PersonaModel(
         id: widget.persona?.id,
         identificacion: identificacionCtrl.text.trim(),

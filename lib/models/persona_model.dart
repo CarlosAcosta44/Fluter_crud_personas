@@ -19,31 +19,25 @@ class PersonaModel {
     this.fotoPerfil,
   });
 
-  factory PersonaModel.fromJson(Map<String, dynamic> json) {
-    return PersonaModel(
-      id: json['id'],
-      identificacion: json['identificacion'] ?? '',
-      nombre: json['nombre'] ?? '',
-      apellido: json['apellido'] ?? '',
-      email: json['email'] ?? '',
-      telefono: json['telefono'],
-      direccion: json['direccion'],
-      fotoPerfil: json['foto_perfil'],
-    );
-  }
+  factory PersonaModel.fromJson(Map<String, dynamic> json) => PersonaModel(
+    id: json['id'],
+    identificacion: json['identificacion'] ?? '',
+    nombre: json['nombre'] ?? '',
+    apellido: json['apellido'] ?? '',
+    email: json['email'] ?? '',
+    telefono: json['telefono'],
+    direccion: json['direccion'],
+    fotoPerfil: json['foto_perfil'],
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {
-      'identificacion': identificacion,
-      'nombre': nombre,
-      'apellido': apellido,
-      'email': email,
-    };
-    if (id != null) data['id'] = id;
-    if (telefono != null) data['telefono'] = telefono;
-    if (direccion != null) data['direccion'] = direccion;
-    if (fotoPerfil != null) data['foto_perfil'] = fotoPerfil;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    'identificacion': identificacion,
+    'nombre': nombre,
+    'apellido': apellido,
+    'email': email,
+    'telefono': telefono,
+    'direccion': direccion,
+    'foto_perfil': fotoPerfil,
+  };
 }
 
