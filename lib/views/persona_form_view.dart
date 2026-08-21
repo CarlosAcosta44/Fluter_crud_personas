@@ -88,19 +88,31 @@ class _PersonaFormViewState extends State<PersonaFormView> {
           child: Column(
             children: [
               GestureDetector(
-                onTap: () => controller.pickImageFromCamera(),
-                child: Obx(() {
-                  final photoBase64 = controller.selectedPhotoBase64.value;
-                  return CircleAvatar(
-                    radius: 50,
-                    backgroundImage: photoBase64 != null && photoBase64.isNotEmpty
-                        ? MemoryImage(base64Decode(photoBase64))
-                        : null,
-                    child: photoBase64 == null || photoBase64.isEmpty
-                        ? const Icon(Icons.camera_alt, size: 40)
-                        : null,
-                  );
-                }),
+                onTap: () => controller.showImageSourceDialog(),
+                child: Column(
+                  children: [
+                    Obx(() {
+                      final photoBase64 = controller.selectedPhotoBase64.value;
+                      return CircleAvatar(
+                        radius: 50,
+                        backgroundImage: photoBase64 != null && photoBase64.isNotEmpty
+                            ? MemoryImage(base64Decode(photoBase64))
+                            : null,
+                        child: photoBase64 == null || photoBase64.isEmpty
+                            ? const Icon(Icons.camera_alt, size: 40)
+                            : null,
+                      );
+                    }),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Subir/Tomar Foto',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
               TextFormField(
