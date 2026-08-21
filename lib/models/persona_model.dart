@@ -42,3 +42,4 @@ class PersonaModel {
     return data;
   }
 }
+
