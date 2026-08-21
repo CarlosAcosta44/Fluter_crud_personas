@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/persona_controller.dart';
@@ -37,6 +38,14 @@ class PersonaListView extends StatelessWidget {
             return Card(
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: persona.fotoPerfil != null && persona.fotoPerfil!.isNotEmpty
+                      ? MemoryImage(base64Decode(persona.fotoPerfil!))
+                      : null,
+                  child: persona.fotoPerfil == null || persona.fotoPerfil!.isEmpty
+                      ? const Icon(Icons.person)
+                      : null,
+                ),
                 title: Text('${persona.nombre} ${persona.apellido}'),
                 subtitle: Text('ID: ${persona.identificacion}'),
                 trailing: Row(

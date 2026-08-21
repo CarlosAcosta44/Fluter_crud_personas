@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../models/persona_model.dart';
 
@@ -22,6 +23,15 @@ class PersonaDetailView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
+                if (persona.fotoPerfil != null && persona.fotoPerfil!.isNotEmpty)
+                  Center(
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: MemoryImage(base64Decode(persona.fotoPerfil!)),
+                    ),
+                  ),
+                if (persona.fotoPerfil != null && persona.fotoPerfil!.isNotEmpty)
+                  const SizedBox(height: 20),
                 _buildDetailRow('ID en BD', persona.id?.toString() ?? 'N/A'),
                 const Divider(),
                 _buildDetailRow('Identificación', persona.identificacion),

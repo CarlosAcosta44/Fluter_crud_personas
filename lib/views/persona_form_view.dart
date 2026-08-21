@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/persona_controller.dart';
@@ -29,6 +30,11 @@ class _PersonaFormViewState extends State<PersonaFormView> {
   @override
   void initState() {
     super.initState();
+    if (isEditing) {
+      controller.selectedPhotoBase64.value = widget.persona?.fotoPerfil;
+    } else {
+      controller.selectedPhotoBase64.value = null;
+    }
     identificacionCtrl = TextEditingController(text: widget.persona?.identificacion ?? '');
     nombreCtrl = TextEditingController(text: widget.persona?.nombre ?? '');
     apellidoCtrl = TextEditingController(text: widget.persona?.apellido ?? '');
@@ -58,6 +64,7 @@ class _PersonaFormViewState extends State<PersonaFormView> {
         email: emailCtrl.text.trim(),
         telefono: telefonoCtrl.text.trim().isNotEmpty ? telefonoCtrl.text.trim() : null,
         direccion: direccionCtrl.text.trim().isNotEmpty ? direccionCtrl.text.trim() : null,
+        fotoPerfil: controller.selectedPhotoBase64.value,
       );
 
       if (isEditing) {
@@ -80,6 +87,22 @@ class _PersonaFormViewState extends State<PersonaFormView> {
           key: _formKey,
           child: Column(
             children: [
+              GestureDetector(
+                onTap: () => controller.pickImageFromCamera(),
+                child: Obx(() {
+                  final photoBase64 = controller.selectedPhotoBase64.value;
+                  return CircleAvatar(
+                    radius: 50,
+                    backgroundImage: photoBase64 != null && photoBase64.isNotEmpty
+                        ? MemoryImage(base64Decode(photoBase64))
+                        : null,
+                    child: photoBase64 == null || photoBase64.isEmpty
+                        ? const Icon(Icons.camera_alt, size: 40)
+                        : null,
+                  );
+                }),
+              ),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: identificacionCtrl,
                 decoration: const InputDecoration(

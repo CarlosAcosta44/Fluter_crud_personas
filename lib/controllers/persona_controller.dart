@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../models/persona_model.dart';
 import '../services/api_service.dart';
 
@@ -8,6 +10,20 @@ class PersonaController extends GetxController {
   
   RxList<PersonaModel> personas = <PersonaModel>[].obs;
   RxBool isLoading = false.obs;
+  final Rx<String?> selectedPhotoBase64 = Rx<String?>(null);
+
+  Future<void> pickImageFromCamera() async {
+    final picker = ImagePicker();
+    final XFile? image = await picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 50,
+      maxWidth: 600,
+    );
+    if (image != null) {
+      final bytes = await image.readAsBytes();
+      selectedPhotoBase64.value = base64Encode(bytes);
+    }
+  }
 
   @override
   void onInit() {
