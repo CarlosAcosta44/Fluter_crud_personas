@@ -25,34 +25,47 @@ class PersonaController extends GetxController {
         selectedPhotoBase64.value = base64Encode(bytes);
       }
     } catch (e) {
-      Get.snackbar('Error', 'No se pudo obtener la imagen: $e');
+      if (source == ImageSource.camera) {
+        Get.snackbar(
+          'Información',
+          'La cámara no está disponible en la versión de escritorio. Abriendo explorador de archivos...',
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 4),
+        );
+        await pickImage(ImageSource.gallery);
+      } else {
+        Get.snackbar('Error', 'No se pudo obtener la imagen: $e');
+      }
     }
   }
 
   void showImageSourceDialog() {
     Get.bottomSheet(
-      Container(
+      Material(
         color: Colors.white,
-        padding: const EdgeInsets.all(16),
-        child: Wrap(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text('Tomar Foto con Cámara'),
-              onTap: () {
-                Get.back();
-                pickImage(ImageSource.camera);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: const Text('Seleccionar de la Galería / Archivos'),
-              onTap: () {
-                Get.back();
-                pickImage(ImageSource.gallery);
-              },
-            ),
-          ],
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Tomar Foto con Cámara'),
+                onTap: () {
+                  Get.back();
+                  pickImage(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Seleccionar de la Galería / Archivos'),
+                onTap: () {
+                  Get.back();
+                  pickImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
