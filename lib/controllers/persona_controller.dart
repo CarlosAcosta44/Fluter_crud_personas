@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,8 +31,9 @@ class PersonaController extends GetxController {
   }
 
   void showImageSourceDialog() {
-    // En plataformas de escritorio (Linux/Windows/Mac), abrir directamente el selector de archivos/galería
-    if (!GetPlatform.isMobile) {
+    // En Linux Desktop sin soporte nativo de cámara, abrir la galería directamente.
+    // En Web (Chrome) y Móvil (Android/iOS), mostrar el menú para elegir Cámara o Galería.
+    if (!kIsWeb && !GetPlatform.isMobile) {
       pickImage(ImageSource.gallery);
       return;
     }
