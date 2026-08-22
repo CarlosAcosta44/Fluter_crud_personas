@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,52 +11,32 @@ class PersonaController extends GetxController {
   
   RxList<PersonaModel> personas = <PersonaModel>[].obs;
   RxBool isLoading = false.obs;
-  final Rx<String?> selectedPhotoBase64 = Rx<String?>(null);
+  
+  var selectedPhotoBase64 = Rxn<String>();
+  final ImagePicker _picker = ImagePicker();
 
   Future<void> pickImage(ImageSource source) async {
     try {
-      final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(
+      final XFile? image = await _picker.pickImage(
         source: source,
-        imageQuality: 50,
-        maxWidth: 600,
+        maxWidth: 800,
+        maxHeight: 800,
+        imageQuality: 85,
       );
+
       if (image != null) {
         final bytes = await image.readAsBytes();
-        selectedPhotoBase64.value = base64Encode(bytes);
+        final base64String = 'data:image/jpeg;base64,${base64Encode(bytes)}';
+        selectedPhotoBase64.value = base64String;
       }
     } catch (e) {
-      Get.snackbar('Error', 'No se pudo obtener la imagen: $e');
+      print("Error al capturar foto: $e");
+      Get.snackbar(
+        'Aviso',
+        'No se pudo acceder a la fuente seleccionada. Selecciona una imagen desde el explorador de archivos.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
-  }
-
-  void showImageSourceDialog() {
-    Get.bottomSheet(
-      Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(16),
-        child: Wrap(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text('Tomar Foto con Cámara'),
-              onTap: () {
-                Get.back();
-                pickImage(ImageSource.camera);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: const Text('Seleccionar de la Galería / Archivos'),
-              onTap: () {
-                Get.back();
-                pickImage(ImageSource.gallery);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   @override

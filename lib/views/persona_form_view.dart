@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import '../controllers/persona_controller.dart';
 import '../models/persona_model.dart';
 import '../validations/persona_validator.dart';
@@ -41,6 +42,12 @@ class _PersonaFormViewState extends State<PersonaFormView> {
     emailCtrl = TextEditingController(text: widget.persona?.email ?? '');
     telefonoCtrl = TextEditingController(text: widget.persona?.telefono ?? '');
     direccionCtrl = TextEditingController(text: widget.persona?.direccion ?? '');
+    
+    if (widget.persona?.fotoPerfil != null) {
+      controller.selectedPhotoBase64.value = widget.persona!.fotoPerfil;
+    } else {
+      controller.selectedPhotoBase64.value = null;
+    }
   }
 
   @override
@@ -90,20 +97,60 @@ class _PersonaFormViewState extends State<PersonaFormView> {
           child: Column(
             children: [
               GestureDetector(
-                onTap: () => controller.showImageSourceDialog(),
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SafeArea(
+                        child: Wrap(
+                          children: [
+                            ListTile(
+                              leading: const Icon(Icons.camera_alt),
+                              title: const Text('Tomar Foto'),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                controller.pickImage(ImageSource.camera);
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.photo_library),
+                              title: const Text('Galería / Archivos'),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                controller.pickImage(ImageSource.gallery);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
                 child: Column(
                   children: [
                     Obx(() {
-                      final photoBase64 = controller.selectedPhotoBase64.value;
-                      return CircleAvatar(
-                        radius: 50,
-                        backgroundImage: photoBase64 != null && photoBase64.isNotEmpty
-                            ? MemoryImage(base64Decode(photoBase64))
-                            : null,
-                        child: photoBase64 == null || photoBase64.isEmpty
-                            ? const Icon(Icons.camera_alt, size: 40)
-                            : null,
-                      );
+                      final base64Str = controller.selectedPhotoBase64.value;
+                      Widget imageWidget;
+                      if (base64Str != null && base64Str.isNotEmpty) {
+                        try {
+                          final cleanBase64 = base64Str.split(',').last;
+                          imageWidget = CircleAvatar(
+                            radius: 50,
+                            backgroundImage: MemoryImage(base64Decode(cleanBase64)),
+                          );
+                        } catch (e) {
+                          imageWidget = const CircleAvatar(
+                            radius: 50,
+                            child: Icon(Icons.broken_image, size: 50),
+                          );
+                        }
+                      } else {
+                        imageWidget = const CircleAvatar(
+                          radius: 50,
+                          child: Icon(Icons.camera_alt, size: 50),
+                        );
+                      }
+                      return imageWidget;
                     }),
                     const SizedBox(height: 8),
                     const Text(
