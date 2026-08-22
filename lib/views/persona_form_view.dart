@@ -98,7 +98,7 @@ class _PersonaFormViewState extends State<PersonaFormView> {
                       return CircleAvatar(
                         radius: 50,
                         backgroundImage: photoBase64 != null && photoBase64.isNotEmpty
-                            ? MemoryImage(base64Decode(photoBase64))
+                            ? MemoryImage(base64Decode(photoBase64.contains(',') ? photoBase64.split(',').last : photoBase64))
                             : null,
                         child: photoBase64 == null || photoBase64.isEmpty
                             ? const Icon(Icons.camera_alt, size: 40)

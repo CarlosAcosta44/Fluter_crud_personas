@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/persona_model.dart';
 import '../services/api_service.dart';
+import '../views/camera_view.dart';
 
 class PersonaController extends GetxController {
   final ApiService _apiService = ApiService();
@@ -49,9 +50,13 @@ class PersonaController extends GetxController {
               ListTile(
                 leading: const Icon(Icons.camera_alt),
                 title: const Text('Tomar Foto con Cámara'),
-                onTap: () {
+                onTap: () async {
                   Get.back();
-                  pickImage(ImageSource.camera);
+                  final result = await Get.to(() => const CameraView());
+                  if (result != null && result is XFile) {
+                    final bytes = await result.readAsBytes();
+                    selectedPhotoBase64.value = base64Encode(bytes);
+                  }
                 },
               ),
               ListTile(

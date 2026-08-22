@@ -27,7 +27,9 @@ class PersonaDetailView extends StatelessWidget {
                   Center(
                     child: CircleAvatar(
                       radius: 60,
-                      backgroundImage: MemoryImage(base64Decode(persona.fotoPerfil!)),
+                      backgroundImage: MemoryImage(base64Decode(
+                        persona.fotoPerfil!.contains(',') ? persona.fotoPerfil!.split(',').last : persona.fotoPerfil!
+                      )),
                     ),
                   ),
                 if (persona.fotoPerfil != null && persona.fotoPerfil!.isNotEmpty)
