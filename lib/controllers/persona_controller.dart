@@ -1,5 +1,8 @@
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../models/persona_model.dart';
 import '../services/api_service.dart';
 
@@ -8,6 +11,33 @@ class PersonaController extends GetxController {
   
   RxList<PersonaModel> personas = <PersonaModel>[].obs;
   RxBool isLoading = false.obs;
+  
+  var selectedPhotoBase64 = Rxn<String>();
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> pickImage(ImageSource source) async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: source,
+        maxWidth: 800,
+        maxHeight: 800,
+        imageQuality: 85,
+      );
+
+      if (image != null) {
+        final bytes = await image.readAsBytes();
+        final base64String = 'data:image/jpeg;base64,${base64Encode(bytes)}';
+        selectedPhotoBase64.value = base64String;
+      }
+    } catch (e) {
+      print("Error al capturar foto: $e");
+      Get.snackbar(
+        'Aviso',
+        'No se pudo acceder a la fuente seleccionada. Selecciona una imagen desde el explorador de archivos.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 
   @override
   void onInit() {

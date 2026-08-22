@@ -6,6 +6,7 @@ class PersonaModel {
   String email;
   String? telefono;
   String? direccion;
+  String? fotoPerfil;
 
   PersonaModel({
     this.id,
@@ -15,6 +16,7 @@ class PersonaModel {
     required this.email,
     this.telefono,
     this.direccion,
+    this.fotoPerfil,
   });
 
   factory PersonaModel.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class PersonaModel {
       email: json['email'] ?? '',
       telefono: json['telefono'],
       direccion: json['direccion'],
+      fotoPerfil: json['foto_perfil'],
     );
   }
 
@@ -39,6 +42,7 @@ class PersonaModel {
     if (id != null) data['id'] = id;
     if (telefono != null) data['telefono'] = telefono;
     if (direccion != null) data['direccion'] = direccion;
+    if (fotoPerfil != null) data['foto_perfil'] = fotoPerfil;
     return data;
   }
 }
