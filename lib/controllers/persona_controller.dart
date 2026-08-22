@@ -25,21 +25,17 @@ class PersonaController extends GetxController {
         selectedPhotoBase64.value = base64Encode(bytes);
       }
     } catch (e) {
-      if (source == ImageSource.camera) {
-        Get.snackbar(
-          'Información',
-          'La cámara no está disponible en la versión de escritorio. Abriendo explorador de archivos...',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 4),
-        );
-        await pickImage(ImageSource.gallery);
-      } else {
-        Get.snackbar('Error', 'No se pudo obtener la imagen: $e');
-      }
+      Get.snackbar('Error', 'No se pudo obtener la imagen: $e');
     }
   }
 
   void showImageSourceDialog() {
+    // En plataformas de escritorio (Linux/Windows/Mac), abrir directamente el selector de archivos/galería
+    if (!GetPlatform.isMobile) {
+      pickImage(ImageSource.gallery);
+      return;
+    }
+
     Get.bottomSheet(
       Material(
         color: Colors.white,
